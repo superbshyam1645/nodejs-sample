@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Order = require("../models/orderModel");
 
-exports.getAll = (req, res) => {
+exports.getAll = (req, res, next) => {
   Order.find({})
     .populate("user") // Populate user details
     .populate("product") // Populate product details
@@ -11,11 +11,11 @@ exports.getAll = (req, res) => {
         .json({ message: "Available Orders fetched successfully", orders });
     })
     .catch((error) => {
-      res.status(500).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.getOne = (req, res) => {
+exports.getOne = (req, res, next) => {
   Order.findById(req.params.id)
     .populate("user product") // Optional: to populate related User and Product data
     .then((order) => {
@@ -25,11 +25,11 @@ exports.getOne = (req, res) => {
       res.status(200).json({ message: `Order fetched successfully`, order });
     })
     .catch((error) => {
-      res.status(400).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.postOne = async (req, res) => {
+exports.postOne = async (req, res, next) => {
   try {
     const { name, amount, purchasedate, user, product } = req.body;
 
@@ -51,6 +51,6 @@ exports.postOne = async (req, res) => {
 
     res.status(201).json({ message: "Order created successfully", order });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };

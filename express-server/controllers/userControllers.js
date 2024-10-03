@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.SALT_ROUNDS);
 const { generateToken } = require("../config/jwtUtils");
-exports.getUser = async (req, res) => {
+exports.getUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -29,11 +29,11 @@ exports.getUser = async (req, res) => {
       token, // Send the token in the response
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
   try {
     const { name, password, email, address, age } = req.body;
 
@@ -62,11 +62,11 @@ exports.createUser = async (req, res) => {
       token, // Send the token in the response
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
 
@@ -107,11 +107,11 @@ exports.updateUser = async (req, res) => {
 
     res.json({ message: "User updated successfully", updatedUser });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res, next) => {
   try {
     const userId = req.params.id;
 
@@ -123,6 +123,6 @@ exports.deleteUser = async (req, res) => {
 
     res.json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };

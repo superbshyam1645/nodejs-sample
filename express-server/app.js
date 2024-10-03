@@ -7,7 +7,7 @@ var indexRouter = require("./routes/products");
 var usersRouter = require("./routes/users");
 var orderRouter = require("./routes/Orders");
 var app = express();
-
+var errorHandler = require("./middleware/errorHandler");
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -35,5 +35,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
-
+app.use(errorHandler);
 module.exports = app;

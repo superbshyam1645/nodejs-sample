@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 
-exports.getAll = (req, res) => {
+exports.getAll = (req, res, next) => {
   Product.find({ available: 1 })
     .then((products) => {
       res
@@ -8,11 +8,11 @@ exports.getAll = (req, res) => {
         .json({ message: "Available products fetched successfully", products });
     })
     .catch((error) => {
-      res.status(500).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.getOneById = (req, res) => {
+exports.getOneById = (req, res, next) => {
   const productId = req.params.id;
 
   Product.findById(productId)
@@ -25,11 +25,11 @@ exports.getOneById = (req, res) => {
         .json({ message: "Product fetched successfully", product });
     })
     .catch((error) => {
-      res.status(500).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.postOne = (req, res) => {
+exports.postOne = (req, res, next) => {
   Product.create({
     name: req.body.name,
     price: req.body.price,
@@ -43,11 +43,11 @@ exports.postOne = (req, res) => {
         .json({ message: "Product created successfully", product });
     })
     .catch((error) => {
-      res.status(400).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.updateOne = (req, res) => {
+exports.updateOne = (req, res, next) => {
   const productId = req.params.id;
   const updatedData = {};
 
@@ -68,11 +68,11 @@ exports.updateOne = (req, res) => {
         .json({ message: "Product updated successfully", product });
     })
     .catch((error) => {
-      res.status(400).json({ error: error.message });
+      next(error);
     });
 };
 
-exports.deleteOne = (req, res) => {
+exports.deleteOne = (req, res, next) => {
   const productId = req.params.id;
 
   Product.findByIdAndDelete(productId)
@@ -83,6 +83,6 @@ exports.deleteOne = (req, res) => {
       res.status(200).json({ message: "Product deleted successfully" });
     })
     .catch((error) => {
-      res.status(500).json({ error: error.message });
+      next(error);
     });
 };
