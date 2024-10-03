@@ -1,11 +1,11 @@
 var express = require("express");
 var router = express.Router();
 var userController = require("../controllers/userControllers");
-
+var authenticatedToken = require("../middleware/auth");
 router
-  .get("/", userController.getUser)
-  .post("/createuser", userController.createUser)
-  .put("/updateuser/:id", userController.updateUser)
-  .delete("/deleteuser/:id", userController.deleteUser);
+  .post("/login", userController.getUser)
+  .post("/register", userController.createUser)
+  .put("/:id", authenticatedToken, userController.updateUser)
+  .delete("/:id", authenticatedToken, userController.deleteUser);
 
 module.exports = router;
